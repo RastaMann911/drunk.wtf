@@ -1,32 +1,13 @@
-# Party Games – Setup Test
-
+# Party Games – Setup Test (Minimal)
 ## Local Run
+1) cd client
+2) npm install
+3) npm run dev
+Open http://localhost:5173 — you should see: "✅ Server is running successfully"
 
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-## Vercel Deployment
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy to preview
-vercel dev
-
-# Deploy to production
-vercel --prod
-```
-
-The app will show "✅ Server is running successfully" when deployed correctly.
+## Deploy to Vercel
+1) npm i -g vercel
+2) vercel login
+3) cd client
+4) vercel
+Done — open the URL Vercel prints.
