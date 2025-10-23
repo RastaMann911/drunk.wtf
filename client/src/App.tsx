@@ -1,6 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from '../logo.png';
 import TipsySpinner from './components/TipsySpinner';
+import PlinkoWithCountdown from './components/PlinkoWithCountdown';
+import BlackjackWithCountdown from './components/BlackjackWithCountdown';
+import QuizWithCountdown from './components/QuizWithCountdown';
+import DiceWithCountdown from './components/DiceWithCountdown';
+import PasswordGate from './components/PasswordGate';
 
 function HomePage() {
   const containerStyle: React.CSSProperties = {
@@ -67,11 +72,18 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/tipsy-spinner" element={<TipsySpinner />} />
-      </Routes>
-    </Router>
+    <PasswordGate>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/tipsy-spinner" element={<TipsySpinner />} />
+          <Route path="/plinko" element={<PlinkoWithCountdown />} />
+          <Route path="/blackjack" element={<BlackjackWithCountdown />} />
+          <Route path="/quiz" element={<QuizWithCountdown />} />
+          <Route path="/dice-trinken" element={<DiceWithCountdown />} />
+          <Route path="/dice-verteilen" element={<DiceWithCountdown />} />
+        </Routes>
+      </Router>
+    </PasswordGate>
   );
 }
