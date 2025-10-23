@@ -64,11 +64,13 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-        padding: '20px'
+        padding: '16px',
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)'
       }}>
         <div style={{
           backgroundColor: '#3f3f3f',
-          padding: '40px',
+          padding: window.innerWidth < 768 ? '24px' : '40px',
           borderRadius: '16px',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
           maxWidth: '400px',
@@ -76,7 +78,7 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
           textAlign: 'center'
         }}>
           <h1 style={{
-            fontSize: '2rem',
+            fontSize: window.innerWidth < 768 ? '1.75rem' : '2rem',
             fontWeight: '600',
             marginBottom: '8px',
             margin: '0 0 8px 0'
@@ -84,7 +86,7 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
             🔒 Private Access
           </h1>
           <p style={{
-            fontSize: '1rem',
+            fontSize: window.innerWidth < 768 ? '0.9rem' : '1rem',
             opacity: '0.8',
             marginBottom: '32px',
             margin: '0 0 32px 0'
@@ -100,15 +102,17 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
               placeholder="Enter password"
               style={{
                 width: '100%',
-                padding: '16px',
-                fontSize: '16px',
+                padding: window.innerWidth < 768 ? '14px' : '16px',
+                fontSize: window.innerWidth < 768 ? '16px' : '16px',
                 borderRadius: '8px',
                 border: '2px solid #555',
                 backgroundColor: '#4f4f4f',
                 color: '#f2f2f2',
                 marginBottom: '16px',
                 outline: 'none',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                WebkitAppearance: 'none',
+                touchAction: 'manipulation'
               }}
               required
             />
@@ -128,15 +132,17 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
               type="submit"
               style={{
                 width: '100%',
-                padding: '16px',
-                fontSize: '16px',
+                padding: window.innerWidth < 768 ? '14px' : '16px',
+                fontSize: window.innerWidth < 768 ? '16px' : '16px',
                 fontWeight: '600',
                 backgroundColor: '#f2f2f2',
                 color: '#2f2f2f',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                touchAction: 'manipulation',
+                minHeight: '44px'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.backgroundColor = '#e0e0e0';
@@ -158,8 +164,8 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
       {children}
       <div style={{
         position: 'fixed',
-        top: '20px',
-        right: '20px',
+        top: window.innerWidth < 768 ? '16px' : '20px',
+        right: window.innerWidth < 768 ? '16px' : '20px',
         zIndex: 1000
       }}>
         <button
@@ -169,10 +175,13 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
             color: '#f2f2f2',
             border: 'none',
             borderRadius: '6px',
-            padding: '8px 16px',
-            fontSize: '14px',
+            padding: window.innerWidth < 768 ? '10px 14px' : '8px 16px',
+            fontSize: window.innerWidth < 768 ? '13px' : '14px',
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            touchAction: 'manipulation',
+            minHeight: '44px',
+            minWidth: '44px'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
