@@ -59,6 +59,10 @@ export default function TipsySpinner() {
   const [result, setResult] = useState('');
   const navigate = useNavigate();
   
+  // Mobile detection and sizing
+  const isMobile = window.innerWidth < 768;
+  const canvasSize = isMobile ? Math.min(window.innerWidth - 40, 300) : 650;
+  
   // Physics configuration - ADJUST THESE VALUES
   const PIN_RESISTANCE = 0.08; // Resistance applied when flapper hits a pin (0.05 - 0.15 recommended)
   const BASE_FRICTION = 0.995; // Base deceleration between pins (0.99 - 0.999 recommended)
@@ -259,56 +263,64 @@ export default function TipsySpinner() {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    padding: "20px",
-    textAlign: "center"
+    justifyContent: isMobile ? "flex-start" : "center",
+    padding: isMobile ? "16px" : "20px",
+    paddingTop: isMobile ? "calc(env(safe-area-inset-top) + 60px)" : "20px",
+    paddingBottom: isMobile ? "calc(env(safe-area-inset-bottom) + 20px)" : "20px",
+    textAlign: "center",
+    boxSizing: "border-box"
   };
 
   const backButtonStyle: React.CSSProperties = {
     position: "absolute",
-    top: "20px",
-    left: "20px",
+    top: isMobile ? "calc(env(safe-area-inset-top) + 16px)" : "20px",
+    left: isMobile ? "16px" : "20px",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     color: "#f2f2f2",
     border: "2px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: "12px",
-    padding: "10px 20px",
+    borderRadius: isMobile ? "8px" : "12px",
+    padding: isMobile ? "8px 12px" : "10px 20px",
     fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-    fontSize: "14px",
+    fontSize: isMobile ? "13px" : "14px",
     fontWeight: "500",
     cursor: "pointer",
     textDecoration: "none",
     display: "inline-block",
     zIndex: 10,
     backdropFilter: "blur(10px)",
-    transition: "all 0.2s ease"
+    transition: "all 0.2s ease",
+    touchAction: "manipulation",
+    minHeight: "44px"
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: "2.5rem",
+    fontSize: isMobile ? "1.5rem" : "2.5rem",
     fontWeight: "700",
-    marginBottom: "30px",
-    margin: "0 0 30px 0",
+    marginBottom: isMobile ? "20px" : "30px",
+    margin: isMobile ? "0 0 20px 0" : "0 0 30px 0",
     color: "#f2f2f2",
     letterSpacing: "-0.5px",
-    textShadow: "0 2px 10px rgba(0,0,0,0.3)"
+    textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+    lineHeight: "1.2"
   };
 
   const resultStyle: React.CSSProperties = {
-    fontSize: "1.5rem",
+    fontSize: isMobile ? "1.2rem" : "1.5rem",
     fontWeight: "600",
-    marginTop: "30px",
-    padding: "20px 40px",
+    marginTop: isMobile ? "20px" : "30px",
+    padding: isMobile ? "16px 20px" : "20px 40px",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: "16px",
-    minHeight: "70px",
+    borderRadius: isMobile ? "12px" : "16px",
+    minHeight: isMobile ? "60px" : "70px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     backdropFilter: "blur(10px)",
     border: "2px solid rgba(255, 255, 255, 0.2)",
     color: "#f2f2f2",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
+    boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+    maxWidth: isMobile ? "280px" : "none",
+    margin: isMobile ? "20px auto 0" : "30px auto 0"
   };
 
   useEffect(() => {
@@ -320,7 +332,7 @@ export default function TipsySpinner() {
 
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const radius = Math.min(canvas.width, canvas.height) / 2 - 60;
+    const radius = Math.min(canvas.width, canvas.height) / 2 - (isMobile ? 30 : 60);
     const numSegments = wheelOptions.length;
     const segmentAngle = (Math.PI * 2) / numSegments;
 
@@ -463,7 +475,7 @@ export default function TipsySpinner() {
         ctx.rotate(startAngle + segmentAngle / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = textColor;
-        ctx.font = isWinningSegment ? 'bold 15px Inter, Arial' : 'bold 13px Inter, Arial';
+        ctx.font = isWinningSegment ? `bold ${isMobile ? '10px' : '15px'} Inter, Arial` : `bold ${isMobile ? '8px' : '13px'} Inter, Arial`;
         ctx.shadowColor = isWinningSegment 
           ? `rgba(0, 255, 255, ${0.8 * (Math.sin(gameState.neonAnimationTime * 10) * 0.5 + 0.5)})`
           : 'rgba(0, 0, 0, 0.5)';
@@ -948,22 +960,28 @@ export default function TipsySpinner() {
       
       <canvas
         ref={canvasRef}
-        width={650}
-        height={650}
+        width={canvasSize}
+        height={canvasSize}
         onClick={handleSpin}
         style={{
           cursor: 'pointer',
-          borderRadius: '20px',
+          borderRadius: isMobile ? '12px' : '20px',
           backgroundColor: 'transparent',
-          transition: 'transform 0.2s ease'
+          transition: 'transform 0.2s ease',
+          maxWidth: '100%',
+          height: 'auto',
+          display: 'block',
+          margin: '0 auto'
         }}
         onMouseEnter={(e) => {
-          if (!gameStateRef.current.isSpinning) {
+          if (!gameStateRef.current.isSpinning && !isMobile) {
             e.currentTarget.style.transform = 'scale(1.02)';
           }
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
+          if (!isMobile) {
+            e.currentTarget.style.transform = 'scale(1)';
+          }
         }}
       />
       
