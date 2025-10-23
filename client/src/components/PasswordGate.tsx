@@ -166,6 +166,12 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
     );
   }
 
+  const isMobile = window.innerWidth < 768;
+
+  // Debug logging
+  console.log('PasswordGate: isAuthenticated =', isAuthenticated);
+  console.log('PasswordGate: children =', children);
+
   return (
     <>
       {children}
