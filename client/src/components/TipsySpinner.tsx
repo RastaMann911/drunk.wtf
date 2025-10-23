@@ -59,9 +59,23 @@ export default function TipsySpinner() {
   const [result, setResult] = useState('');
   const navigate = useNavigate();
   
-  // Mobile detection and sizing
+  // Responsive sizing for both mobile and desktop
   const isMobile = window.innerWidth < 768;
-  const canvasSize = isMobile ? Math.min(window.innerWidth - 40, 300) : 650;
+  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+  const isDesktop = window.innerWidth >= 1024;
+  
+  // Calculate optimal canvas size based on viewport
+  const getCanvasSize = () => {
+    if (isMobile) {
+      return Math.min(window.innerWidth - 40, 320); // Mobile: max 320px
+    } else if (isTablet) {
+      return Math.min(window.innerWidth - 80, 500); // Tablet: max 500px
+    } else {
+      return Math.min(window.innerWidth - 120, 650); // Desktop: max 650px
+    }
+  };
+  
+  const canvasSize = getCanvasSize();
   
   // Physics configuration - ADJUST THESE VALUES
   const PIN_RESISTANCE = 0.08; // Resistance applied when flapper hits a pin (0.05 - 0.15 recommended)
@@ -264,24 +278,24 @@ export default function TipsySpinner() {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: isMobile ? "flex-start" : "center",
-    padding: isMobile ? "16px" : "20px",
-    paddingTop: isMobile ? "calc(env(safe-area-inset-top) + 60px)" : "20px",
-    paddingBottom: isMobile ? "calc(env(safe-area-inset-bottom) + 20px)" : "20px",
+    padding: isMobile ? "16px" : isTablet ? "20px" : "30px",
+    paddingTop: isMobile ? "calc(env(safe-area-inset-top) + 60px)" : isTablet ? "40px" : "60px",
+    paddingBottom: isMobile ? "calc(env(safe-area-inset-bottom) + 20px)" : isTablet ? "30px" : "40px",
     textAlign: "center",
     boxSizing: "border-box"
   };
 
   const backButtonStyle: React.CSSProperties = {
     position: "absolute",
-    top: isMobile ? "calc(env(safe-area-inset-top) + 16px)" : "20px",
-    left: isMobile ? "16px" : "20px",
+    top: isMobile ? "calc(env(safe-area-inset-top) + 16px)" : isTablet ? "20px" : "30px",
+    left: isMobile ? "16px" : isTablet ? "20px" : "30px",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     color: "#f2f2f2",
     border: "2px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: isMobile ? "8px" : "12px",
-    padding: isMobile ? "8px 12px" : "10px 20px",
+    borderRadius: isMobile ? "8px" : isTablet ? "10px" : "12px",
+    padding: isMobile ? "8px 12px" : isTablet ? "10px 16px" : "12px 20px",
     fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-    fontSize: isMobile ? "13px" : "14px",
+    fontSize: isMobile ? "13px" : isTablet ? "14px" : "15px",
     fontWeight: "500",
     cursor: "pointer",
     textDecoration: "none",
@@ -294,10 +308,10 @@ export default function TipsySpinner() {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: isMobile ? "1.5rem" : "2.5rem",
+    fontSize: isMobile ? "1.5rem" : isTablet ? "2rem" : "2.5rem",
     fontWeight: "700",
-    marginBottom: isMobile ? "20px" : "30px",
-    margin: isMobile ? "0 0 20px 0" : "0 0 30px 0",
+    marginBottom: isMobile ? "20px" : isTablet ? "25px" : "30px",
+    margin: isMobile ? "0 0 20px 0" : isTablet ? "0 0 25px 0" : "0 0 30px 0",
     color: "#f2f2f2",
     letterSpacing: "-0.5px",
     textShadow: "0 2px 10px rgba(0,0,0,0.3)",
@@ -305,13 +319,13 @@ export default function TipsySpinner() {
   };
 
   const resultStyle: React.CSSProperties = {
-    fontSize: isMobile ? "1.2rem" : "1.5rem",
+    fontSize: isMobile ? "1.2rem" : isTablet ? "1.3rem" : "1.5rem",
     fontWeight: "600",
-    marginTop: isMobile ? "20px" : "30px",
-    padding: isMobile ? "16px 20px" : "20px 40px",
+    marginTop: isMobile ? "20px" : isTablet ? "25px" : "30px",
+    padding: isMobile ? "16px 20px" : isTablet ? "18px 30px" : "20px 40px",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: isMobile ? "12px" : "16px",
-    minHeight: isMobile ? "60px" : "70px",
+    borderRadius: isMobile ? "12px" : isTablet ? "14px" : "16px",
+    minHeight: isMobile ? "60px" : isTablet ? "65px" : "70px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -319,8 +333,8 @@ export default function TipsySpinner() {
     border: "2px solid rgba(255, 255, 255, 0.2)",
     color: "#f2f2f2",
     boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-    maxWidth: isMobile ? "280px" : "none",
-    margin: isMobile ? "20px auto 0" : "30px auto 0"
+    maxWidth: isMobile ? "280px" : isTablet ? "400px" : "none",
+    margin: isMobile ? "20px auto 0" : isTablet ? "25px auto 0" : "30px auto 0"
   };
 
   useEffect(() => {
@@ -332,7 +346,14 @@ export default function TipsySpinner() {
 
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const radius = Math.min(canvas.width, canvas.height) / 2 - (isMobile ? 30 : 60);
+    // Responsive radius calculation
+    const getRadiusMargin = () => {
+      if (isMobile) return 25;
+      if (isTablet) return 40;
+      return 60; // Desktop
+    };
+    
+    const radius = Math.min(canvas.width, canvas.height) / 2 - getRadiusMargin();
     const numSegments = wheelOptions.length;
     const segmentAngle = (Math.PI * 2) / numSegments;
 
@@ -475,7 +496,14 @@ export default function TipsySpinner() {
         ctx.rotate(startAngle + segmentAngle / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = textColor;
-        ctx.font = isWinningSegment ? `bold ${isMobile ? '10px' : '15px'} Inter, Arial` : `bold ${isMobile ? '8px' : '13px'} Inter, Arial`;
+        // Responsive font sizes
+        const getFontSize = (isWinning: boolean) => {
+          if (isMobile) return isWinning ? '9px' : '7px';
+          if (isTablet) return isWinning ? '12px' : '10px';
+          return isWinning ? '15px' : '13px'; // Desktop
+        };
+        
+        ctx.font = isWinningSegment ? `bold ${getFontSize(true)} Inter, Arial` : `bold ${getFontSize(false)} Inter, Arial`;
         ctx.shadowColor = isWinningSegment 
           ? `rgba(0, 255, 255, ${0.8 * (Math.sin(gameState.neonAnimationTime * 10) * 0.5 + 0.5)})`
           : 'rgba(0, 0, 0, 0.5)';
@@ -965,17 +993,18 @@ export default function TipsySpinner() {
         onClick={handleSpin}
         style={{
           cursor: 'pointer',
-          borderRadius: isMobile ? '12px' : '20px',
+          borderRadius: isMobile ? '12px' : isTablet ? '16px' : '20px',
           backgroundColor: 'transparent',
           transition: 'transform 0.2s ease',
           maxWidth: '100%',
           height: 'auto',
           display: 'block',
-          margin: '0 auto'
+          margin: '0 auto',
+          boxShadow: isMobile ? '0 4px 12px rgba(0,0,0,0.3)' : isTablet ? '0 6px 16px rgba(0,0,0,0.3)' : '0 8px 20px rgba(0,0,0,0.3)'
         }}
         onMouseEnter={(e) => {
           if (!gameStateRef.current.isSpinning && !isMobile) {
-            e.currentTarget.style.transform = 'scale(1.02)';
+            e.currentTarget.style.transform = isTablet ? 'scale(1.01)' : 'scale(1.02)';
           }
         }}
         onMouseLeave={(e) => {
