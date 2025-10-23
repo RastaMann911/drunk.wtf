@@ -18,32 +18,33 @@ function HomePage() {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "flex-start",
-    padding: isMobile ? "16px" : "20px",
-    paddingTop: `max(${isMobile ? '40px' : '60px'}, env(safe-area-inset-top))`,
-    paddingBottom: `env(safe-area-inset-bottom)`,
-    textAlign: "center"
+    justifyContent: isMobile ? "flex-start" : "flex-start",
+    padding: isMobile ? "20px" : "20px",
+    paddingTop: isMobile ? "calc(env(safe-area-inset-top) + 40px)" : "60px",
+    paddingBottom: isMobile ? "calc(env(safe-area-inset-bottom) + 20px)" : "20px",
+    textAlign: "center",
+    boxSizing: "border-box"
   };
 
   const logoStyle: React.CSSProperties = {
-    width: isMobile ? "100px" : "120px",
-    height: isMobile ? "100px" : "120px",
-    marginBottom: isMobile ? "24px" : "32px"
+    width: isMobile ? "80px" : "120px",
+    height: isMobile ? "80px" : "120px",
+    marginBottom: isMobile ? "20px" : "32px"
   };
 
   const headlineStyle: React.CSSProperties = {
-    fontSize: isMobile ? "2rem" : "2.5rem",
+    fontSize: isMobile ? "1.75rem" : "2.5rem",
     fontWeight: "600",
-    marginBottom: "16px",
-    margin: "0 0 16px 0",
+    marginBottom: "12px",
+    margin: "0 0 12px 0",
     lineHeight: "1.2"
   };
 
   const subtitleStyle: React.CSSProperties = {
-    fontSize: isMobile ? "1.1rem" : "1.25rem",
+    fontSize: isMobile ? "1rem" : "1.25rem",
     fontWeight: "400",
     opacity: "0.9",
-    margin: "0 0 40px 0",
+    margin: "0 0 32px 0",
     lineHeight: "1.4"
   };
 
@@ -52,18 +53,20 @@ function HomePage() {
     color: "#2f2f2f",
     border: "none",
     borderRadius: "12px",
-    padding: isMobile ? "16px 24px" : "16px 32px",
+    padding: isMobile ? "16px 20px" : "16px 32px",
     fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-    fontSize: isMobile ? "16px" : "18px",
+    fontSize: isMobile ? "15px" : "18px",
     fontWeight: "600",
     cursor: "pointer",
     textDecoration: "none",
-    display: "inline-block",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     transition: "all 0.3s ease",
     touchAction: "manipulation",
-    minHeight: "44px",
-    width: isMobile ? "100%" : "auto",
-    maxWidth: isMobile ? "300px" : "none"
+    minHeight: "48px",
+    width: "100%",
+    boxSizing: "border-box"
   };
 
   const gameButtons = [
@@ -86,7 +89,7 @@ function HomePage() {
         flexDirection: "column",
         gap: isMobile ? "12px" : "16px",
         width: "100%",
-        maxWidth: isMobile ? "320px" : "400px",
+        maxWidth: isMobile ? "280px" : "400px",
         alignItems: "center"
       }}>
         {gameButtons.map((game, index) => (
@@ -95,15 +98,10 @@ function HomePage() {
             to={game.path} 
             style={{
               ...gameButtonStyle,
-              width: "100%",
-              textAlign: "center",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               gap: "8px"
             }}
           >
-            <span>{game.emoji}</span>
+            <span style={{ fontSize: "18px" }}>{game.emoji}</span>
             <span>{game.name}</span>
           </Link>
         ))}
